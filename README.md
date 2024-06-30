@@ -1,5 +1,6 @@
 
-![Logo](https://github.com/raphaelaugustb/MoneyTimes/assets/66183690/61d448a2-9d98-4385-a51e-17a4b06f6a19)
+![Logo](![image](https://github.com/raphaelaugustb/MoneyTimes/assets/66183690/75b543ae-69b7-4d3f-a632-c93117ae2f59)
+
 
 
 ![image](https://github.com/raphaelaugustb/MoneyTimes/assets/66183690/ec1a5f26-2203-4fce-8837-710f839beb32)
