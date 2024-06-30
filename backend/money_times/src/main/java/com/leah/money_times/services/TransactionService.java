@@ -64,4 +64,18 @@ public class TransactionService {
         }
         return transactionList;
     }
+    public List<Bill> listAllBills(String userId){
+        List<Bill> transactionBills = userService.verifyUser(userId).getBillsList();
+        if (transactionBills.isEmpty() || transactionBills == null)  {
+            throw  new NullPointerException("Lista está vazia");
+        }
+        return transactionBills;
+    }
+    public List<Income> listAllIncomes(String userId){
+        List<Income> transactionIncome = userService.verifyUser(userId).getIncomesList();
+        if (transactionIncome.isEmpty() || transactionIncome == null)  {
+            throw  new NullPointerException("Lista está vazia");
+        }
+        return transactionIncome;
+    }
 }
