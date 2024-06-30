@@ -19,14 +19,14 @@ public class TransactionService {
 
     //Verificar transação
     public Transaction verifyTransaction(Transaction transaction) {
-        if (transaction == null){
-            throw  new NullPointerException("Transação inválida");
-        } else {
+        if (transaction != null){
             return transaction;
+        } else {
+            throw  new NullPointerException("Transação inválida");
         }
     }
     public void createNewBIll(String userId , Bill bill){
-        User user = userService.getUserById(userId);
+        User user = userService.verifyUser(userId);
         verifyTransaction(bill);
         bill.setTypeBill_Income("Bill");
         user.getTransactionList().add(bill);
@@ -34,14 +34,14 @@ public class TransactionService {
         userRepository.save(user);
     }
     public void createNewIncome(String userId, Income income){
-        User user = userService.getUserById(userId);
+        User user = userService.verifyUser(userId);
         verifyTransaction(income);
         user.getTransactionList().add(income);
         user.getIncomesList().add(income);
         userRepository.save(user);
     }
     public List<Transaction> listAllTransactions(String userId) {
-        List<Transaction> transactionList = userService.getUserById(userId).getTransactionList();
+        List<Transaction> transactionList = userService.verifyUser(userId).getTransactionList();
         if (transactionList.isEmpty() || transactionList == null)  {
             throw  new NullPointerException("Lista está vazia");
         }
