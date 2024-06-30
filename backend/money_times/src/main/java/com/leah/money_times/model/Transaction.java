@@ -18,9 +18,8 @@ import java.util.UUID;
 @Getter
 public class Transaction {
     public String generateIdTransaction(){
-        long id = Math.abs(new Random().nextLong());
-        String idConvertedToString = Long.toString(id);
-        return idConvertedToString;
+         long id = Math.abs(new Random().nextLong());
+         return Long.toString(id);
     }
     @Id
     String idTransaction = generateIdTransaction();
