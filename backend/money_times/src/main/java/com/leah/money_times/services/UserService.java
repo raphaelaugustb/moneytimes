@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.Bidi;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -17,13 +18,16 @@ public class UserService {
     public User verifyUser(String userId){{
         User user = userRepository.findById(userId).get();
         if ((user != null)){
-            throw new NullPointerException("Usuário invalido");
-        } else {
             return user;
+        } else {
+            throw new NullPointerException("Usuário invalido");
         }
     }
     }
     public void createUser(User user){
+        user.setIncomesList(new ArrayList<>());
+        user.setBillsList(new ArrayList<>());
+        user.setTransactionList(new ArrayList<>());
         userRepository.save(user);
     }
     public void deleteUser(String id){

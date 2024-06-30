@@ -26,14 +26,14 @@ public class UserController {
         return ResponseEntity.ok("User sucefully deleted.");
     }
     @GetMapping("{id}/user")
-    ResponseEntity<Optional<User>> getUserById(@PathVariable String id) {
-        Optional<User> user = userService.getUserInfo(id);
+    ResponseEntity<User> getUserById(@PathVariable String id) {
+        User user = userService.getUserInfo(id);
         return ResponseEntity.ok(user);
     }
     @PutMapping ("{id}/user")
-    ResponseEntity<Optional<User>> updateUserInfo(@PathVariable String id, @RequestBody UserRequest userRequest) {
+    ResponseEntity<User> updateUserInfo(@PathVariable String id, @RequestBody UserRequest userRequest) {
         userService.updateUserInfo(id, userRequest);
-        Optional<User> user = userService.getUserInfo(id);
+        User user = userService.getUserInfo(id);
         return  ResponseEntity.ok(user);
     }
 }
