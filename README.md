@@ -2,7 +2,8 @@
 ![Logo](https://github.com/raphaelaugustb/MoneyTimes/assets/66183690/61d448a2-9d98-4385-a51e-17a4b06f6a19)
 
 
-# Best way to save your money
+![image](https://github.com/raphaelaugustb/MoneyTimes/assets/66183690/ec1a5f26-2203-4fce-8837-710f839beb32)
+
 
 MoneyTimes is free to use app with simple UI to store all of yours bills and incomes on month you can also get the amount of your bills according to your incomes and other many functionality.
 
