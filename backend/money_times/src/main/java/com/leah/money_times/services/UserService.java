@@ -10,11 +10,14 @@ import org.springframework.stereotype.Service;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
-    public void createUser(UserRequest userRequest){
-        User user = new User();
-        user.setUsername(userRequest.getUsername());
-        user.setPassword(userRequest.getPassword());
-        user.setEmail(userRequest.getEmail());
+    public void createUser(User user){
         userRepository.save(user);
+    }
+    public void deleteUser(String id){
+        if (userRepository.existsById(id)){
+            userRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("User not found");
+        }
     }
 }
