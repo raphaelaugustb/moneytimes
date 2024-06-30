@@ -1,5 +1,5 @@
 
-![Logo](![image](https://github.com/raphaelaugustb/MoneyTimes/assets/66183690/75b543ae-69b7-4d3f-a632-c93117ae2f59))
+![Logo](https://github.com/raphaelaugustb/MoneyTimes/assets/66183690/75b543ae-69b7-4d3f-a632-c93117ae2f59)
 
 
 
