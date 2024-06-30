@@ -13,6 +13,15 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    public User getUserById(String userId){{
+        User user = userRepository.findById(userId).get();
+        if ((user != null)){
+            throw new NullPointerException("Usuário invalido");
+        } else {
+            return user;
+        }
+    }
+    }
     public void createUser(User user){
         userRepository.save(user);
     }
