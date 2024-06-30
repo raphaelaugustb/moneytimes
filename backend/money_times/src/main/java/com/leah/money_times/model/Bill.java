@@ -4,13 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 
 @Setter
 @Getter
 public class Bill extends Transaction {
 
-    public Bill(Long id, String nameTransaction, String typeTransaction, double valueTransaction, LocalDate dateTransaction, String typeBill_Income) {
+    public Bill(String id, String nameTransaction, String typeTransaction, double valueTransaction, LocalDate dateTransaction, String typeBill_Income) {
         super(id, nameTransaction, typeTransaction, valueTransaction, dateTransaction, typeBill_Income);
     }
 

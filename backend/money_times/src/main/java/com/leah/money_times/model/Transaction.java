@@ -9,14 +9,21 @@ import org.springframework.data.annotation.Id;
 import javax.annotation.processing.Generated;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Random;
+import java.util.UUID;
 
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 public class Transaction {
+    public String generateIdTransaction(){
+        long id = Math.abs(new Random().nextLong());
+        String idConvertedToString = Long.toString(id);
+        return idConvertedToString;
+    }
     @Id
-    Long id;
+    String idTransaction = generateIdTransaction();
     String nameTransaction;
     String typeTransaction;
     double valueTransaction;
