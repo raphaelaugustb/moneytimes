@@ -78,4 +78,48 @@ public class TransactionService {
         }
         return transactionIncome;
     }
+    public void updateTransactionInfo(String userId, String transactionId, TransactionRequest transactionRequest){
+        User user = userService.verifyUser(userId);
+        Transaction updateTransaction = null;
+        Transaction removeTransaction = null;
+        for (Transaction transaction : user.getTransactionList()) {
+            if (transaction.getIdTransaction() == transactionId) {
+                removeTransaction = transaction;
+                break;
+            }
+        }
+        if (removeTransaction == null) {
+            throw new NullPointerException("Transação inválida");
+        } else {
+            user.getTransactionList().remove(removeTransaction);
+            updateTransaction.setNameTransaction(transactionRequest.getNameTransaction());
+            updateTransaction.setValueTransaction(transactionRequest.getValueTransaction());
+            updateTransaction.setTypeTransaction(transactionRequest.getTypeTransaction());
+            user.getTransactionList().add(updateTransaction);
+            userRepository.save(user);
+
+        String typeTransaction =  updateTransaction.getTypeTransaction();
+        switch (typeTransaction){
+           case "Bill" -> {
+               Bill billUpdate = new Bill();
+               billUpdate.setNameTransaction(updateTransaction.getNameTransaction());
+               billUpdate.setTypeTransaction(updateTransaction.getTypeTransaction());
+               billUpdate.setValueTransaction(updateTransaction.getValueTransaction());
+               user.getBillsList().remove(removeTransaction);
+               user.getBillsList().add(billUpdate);
+               userRepository.save(user);
+           }
+           case "Income" -> {
+               Income incomeUpdate = new Income();
+               incomeUpdate.setNameTransaction(updateTransaction.getNameTransaction());
+               incomeUpdate.setTypeTransaction(updateTransaction.getTypeTransaction());
+               incomeUpdate.setValueTransaction(updateTransaction.getValueTransaction());
+               user.getIncomesList().remove(removeTransaction);
+               user.getIncomesList().add(incomeUpdate);
+               userRepository.save(user);
+           }
+        }
+        }
+
+    }
 }
