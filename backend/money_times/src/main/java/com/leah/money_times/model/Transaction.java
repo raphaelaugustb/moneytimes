@@ -21,4 +21,5 @@ public class Transaction {
     String typeTransaction;
     double valueTransaction;
     LocalDate dateTransaction = LocalDate.now();
+    String  typeBill_Income;
 }

@@ -9,9 +9,11 @@ import java.time.LocalDate;
 @Setter
 @Getter
 public class Bill extends Transaction {
-    public Bill(Long id, String nameTransaction, String typeTransaction, double valueTransaction, LocalDate dateTransaction) {
-        super(id, nameTransaction, typeTransaction, valueTransaction, dateTransaction);
+
+    public Bill(Long id, String nameTransaction, String typeTransaction, double valueTransaction, LocalDate dateTransaction, String typeBill_Income) {
+        super(id, nameTransaction, typeTransaction, valueTransaction, dateTransaction, typeBill_Income);
     }
+
 
     public Bill() {
     }
