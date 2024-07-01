@@ -124,6 +124,16 @@ public class TransactionService {
                break;
            }
        }
+       if (billRemove == null){
+           user.setBalance(user.getBalance() -incomeRemove.getValueTransaction());
+       }
+       if (incomeRemove == null){
+           user.setBalance(user.getBalance() + billRemove.getValueTransaction());
+       }
+       if (incomeRemove != null && billRemove != null){
+           user.setBalance(user.getBalance() -incomeRemove.getValueTransaction() + billRemove.getValueTransaction());
+       }
+
        user.getBillsList().remove(billRemove);
        user.getTransactionList().remove(transactionRemove);
        user.getIncomesList().remove(incomeRemove);
