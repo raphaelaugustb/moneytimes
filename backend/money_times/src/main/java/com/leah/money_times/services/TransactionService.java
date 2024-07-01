@@ -6,55 +6,55 @@ import com.leah.money_times.model.Income;
 import com.leah.money_times.model.Transaction;
 import com.leah.money_times.repository.UserRepository;
 import com.leah.money_times.request.TransactionRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class TransactionService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private  UserService userService;
+    private UserService userService;
 
     //Verificar transação
     private Boolean verifyTransaction(TransactionRequest transactionRequest) {
-        if (transactionRequest != null){
+        if (transactionRequest != null) {
             return true;
         } else {
-            throw  new NullPointerException("Transação inválida");
+            throw new NullPointerException("Transação inválida");
         }
     }
+
     //Verificar fields da transaction
-    private TransactionRequest verificateFieldTransactionRequest(Transaction transaction , TransactionRequest transactionRequest ){
-        TransactionRequest transactionRequestUpdate =  new TransactionRequest();
-        if (transactionRequest.getNameTransaction() != null){
+    private TransactionRequest verificateFieldTransactionRequest(Transaction transaction, TransactionRequest transactionRequest) {
+        TransactionRequest transactionRequestUpdate = new TransactionRequest();
+        if (transactionRequest.getNameTransaction() != null) {
             transactionRequestUpdate.setNameTransaction(transactionRequest.getNameTransaction());
         } else {
             transactionRequestUpdate.setNameTransaction(transaction.getNameTransaction());
         }
-        if (transactionRequest.getTypeTransaction() != null){
+        if (transactionRequest.getTypeTransaction() != null) {
             transactionRequestUpdate.setTypeTransaction(transactionRequest.getTypeTransaction());
         } else {
             transactionRequestUpdate.setTypeTransaction(transaction.getTypeTransaction());
         }
-        if (transactionRequest.getValueTransaction() != 0){
+        if (transactionRequest.getValueTransaction() != 0) {
             transactionRequestUpdate.setValueTransaction(transactionRequest.getValueTransaction());
         } else {
             transactionRequestUpdate.setValueTransaction(transaction.getValueTransaction());
         }
-        return  transactionRequestUpdate;
+        return transactionRequestUpdate;
     }
 
-    public void createNewBIll(String userId , TransactionRequest transactionRequest){
+    public void createNewBIll(String userId, TransactionRequest transactionRequest) {
         User user = userService.verifyUser(userId);
         Bill bill = new Bill();
         Boolean verifiedTransaction = verifyTransaction(transactionRequest);
-        if (verifiedTransaction){
+        if (verifiedTransaction) {
             bill.setNameTransaction(transactionRequest.getNameTransaction());
             bill.setValueTransaction(transactionRequest.getValueTransaction());
             bill.setTypeTransaction(transactionRequest.getTypeTransaction());
@@ -65,11 +65,12 @@ public class TransactionService {
             userRepository.save(user);
         }
     }
-    public void createNewIncome(String userId, TransactionRequest transactionRequest){
+
+    public void createNewIncome(String userId, TransactionRequest transactionRequest) {
         User user = userService.verifyUser(userId);
-        boolean verifiedTransaction =verifyTransaction(transactionRequest);
+        boolean verifiedTransaction = verifyTransaction(transactionRequest);
         Income income = new Income();
-        if (verifiedTransaction){
+        if (verifiedTransaction) {
             income.setNameTransaction(transactionRequest.getNameTransaction());
             income.setValueTransaction(transactionRequest.getValueTransaction());
             income.setTypeTransaction(transactionRequest.getTypeTransaction());
@@ -80,71 +81,108 @@ public class TransactionService {
             userRepository.save(user);
         }
     }
+
     public List<Transaction> listAllTransactions(String userId) {
         List<Transaction> transactionList = userService.verifyUser(userId).getTransactionList();
-        if (transactionList.isEmpty() || transactionList == null)  {
-            throw  new NullPointerException("Lista está vazia");
+        if (transactionList.isEmpty() || transactionList == null) {
+            throw new NullPointerException("Lista está vazia");
         }
         return transactionList;
     }
-    public List<Bill> listAllBills(String userId){
+
+    public List<Bill> listAllBills(String userId) {
         List<Bill> transactionBills = userService.verifyUser(userId).getBillsList();
-        if (transactionBills.isEmpty() || transactionBills == null)  {
-            throw  new NullPointerException("Lista está vazia");
+        if (transactionBills.isEmpty() || transactionBills == null) {
+            throw new NullPointerException("Lista está vazia");
         }
         return transactionBills;
     }
-    public List<Income> listAllIncomes(String userId){
+
+    public List<Income> listAllIncomes(String userId) {
         List<Income> transactionIncome = userService.verifyUser(userId).getIncomesList();
-        if (transactionIncome.isEmpty() || transactionIncome == null)  {
-            throw  new NullPointerException("Lista está vazia");
+        if (transactionIncome.isEmpty() || transactionIncome == null) {
+            throw new NullPointerException("Lista está vazia");
         }
         return transactionIncome;
     }
-   public void deleteTransactionById(String userId, String transactionId){
+
+    public List<Transaction> listTransactionByValue(String userId, int initValue, int finalValue) {
         User user = userService.verifyUser(userId);
-        Transaction       transactionRemove = null;
+        List<Transaction> transactionListByValue = new ArrayList<>();
+        for (Transaction t : user.getTransactionList()) {
+            if (t.getValueTransaction() >= initValue && t.getValueTransaction() <= finalValue) {
+                transactionListByValue.add(t);
+            }
+        }
+        return transactionListByValue;
+    }
+
+    public List<Transaction> listTransactionByName(String userId, String nameTransaction) {
+        User user = userService.verifyUser(userId);
+        List<Transaction> transactionListByName = new ArrayList<>();
+        for (Transaction t : user.getTransactionList()) {
+            if (t.getNameTransaction().equals(nameTransaction)) {
+                transactionListByName.add(t);
+            }
+        }
+        return transactionListByName;
+    }
+
+    public List<Transaction> listTransactionByType(String userId, String typeTransaction) {
+        User user = userService.verifyUser(userId);
+        List<Transaction> transactionListByType = new ArrayList<>();
+        for (Transaction t : user.getTransactionList()) {
+            if (t.getTypeTransaction().equals(typeTransaction)) {
+                transactionListByType.add(t);
+            }
+        }
+        return transactionListByType;
+    }
+
+    public void deleteTransactionById(String userId, String transactionId) {
+        User user = userService.verifyUser(userId);
+        Transaction transactionRemove = null;
         Income incomeRemove = null;
         Bill billRemove = null;
         for (Transaction transaction : user.getTransactionList()) {
-             if (Objects.equals(transaction.getIdTransaction(), transactionId)) {
-                 transactionRemove = transaction;
-                 break;
-        }
+            if (Objects.equals(transaction.getIdTransaction(), transactionId)) {
+                transactionRemove = transaction;
+                break;
+            }
         }
         for (Bill bill : user.getBillsList()) {
-            if (Objects.equals(bill.getIdTransaction(), transactionId)){
+            if (Objects.equals(bill.getIdTransaction(), transactionId)) {
                 billRemove = bill;
                 break;
             }
         }
-       for(Income income : user.getIncomesList()){
-           if (Objects.equals(income.getIdTransaction(), transactionId)) {
-               incomeRemove = income;
-               break;
-           }
-       }
-       if (billRemove == null){
-           user.setBalance(user.getBalance() -incomeRemove.getValueTransaction());
-       }
-       if (incomeRemove == null){
-           user.setBalance(user.getBalance() + billRemove.getValueTransaction());
-       }
-       if (incomeRemove != null && billRemove != null){
-           user.setBalance(user.getBalance() -incomeRemove.getValueTransaction() + billRemove.getValueTransaction());
-       }
+        for (Income income : user.getIncomesList()) {
+            if (Objects.equals(income.getIdTransaction(), transactionId)) {
+                incomeRemove = income;
+                break;
+            }
+        }
+        if (billRemove == null) {
+            user.setBalance(user.getBalance() - incomeRemove.getValueTransaction());
+        }
+        if (incomeRemove == null) {
+            user.setBalance(user.getBalance() + billRemove.getValueTransaction());
+        }
+        if (incomeRemove != null && billRemove != null) {
+            user.setBalance(user.getBalance() - incomeRemove.getValueTransaction() + billRemove.getValueTransaction());
+        }
 
-       user.getBillsList().remove(billRemove);
-       user.getTransactionList().remove(transactionRemove);
-       user.getIncomesList().remove(incomeRemove);
-       userRepository.save(user);
-   }
+        user.getBillsList().remove(billRemove);
+        user.getTransactionList().remove(transactionRemove);
+        user.getIncomesList().remove(incomeRemove);
+        userRepository.save(user);
+    }
 
 
-    public void updateTransactionInfo(String userId, String transactionId, TransactionRequest transactionRequest){
+    public void updateTransactionInfo(String userId, String transactionId, TransactionRequest transactionRequest) {
         User user = userService.verifyUser(userId);
         String typeTransaction = null;
-         double incomeBalance= 0;
+        double incomeBalance = 0;
         double billsBalance = 0;
         for (Transaction t : user.getTransactionList()) {
             if (t.getIdTransaction().equals(transactionId)) {
@@ -158,10 +196,10 @@ public class TransactionService {
         }
 
 
-        switch (typeTransaction){
-           case "Bill" -> {
-                for (Bill b: user.getBillsList()){
-                    if (Objects.equals(b.getIdTransaction(), transactionId)){
+        switch (typeTransaction) {
+            case "Bill" -> {
+                for (Bill b : user.getBillsList()) {
+                    if (Objects.equals(b.getIdTransaction(), transactionId)) {
                         TransactionRequest transactionVerifcated = verificateFieldTransactionRequest(b, transactionRequest);
                         b.setNameTransaction(transactionVerifcated.getNameTransaction());
                         b.setValueTransaction(transactionVerifcated.getValueTransaction());
@@ -170,30 +208,30 @@ public class TransactionService {
                     }
                 }
 
-           }
-           case "Income" -> {
-               for (Income i : user.getIncomesList()){
-                   if (Objects.equals(i.getIdTransaction(), transactionId)) {
-                       TransactionRequest transactionVerifcated = verificateFieldTransactionRequest(i, transactionRequest);
-                       i.setNameTransaction(transactionVerifcated.getNameTransaction());
-                       i.setValueTransaction(transactionVerifcated.getValueTransaction());
-                       i.setTypeTransaction(transactionVerifcated.getTypeTransaction());
-                       break;
-                   }
-                   }
-               }
-           }
-        for (Income i : user.getIncomesList()){
+            }
+            case "Income" -> {
+                for (Income i : user.getIncomesList()) {
+                    if (Objects.equals(i.getIdTransaction(), transactionId)) {
+                        TransactionRequest transactionVerifcated = verificateFieldTransactionRequest(i, transactionRequest);
+                        i.setNameTransaction(transactionVerifcated.getNameTransaction());
+                        i.setValueTransaction(transactionVerifcated.getValueTransaction());
+                        i.setTypeTransaction(transactionVerifcated.getTypeTransaction());
+                        break;
+                    }
+                }
+            }
+        }
+        for (Income i : user.getIncomesList()) {
             incomeBalance += i.getValueTransaction();
         }
-        for (Bill b : user.getBillsList() ){
+        for (Bill b : user.getBillsList()) {
             billsBalance += b.getValueTransaction();
         }
         user.setBalance(incomeBalance - billsBalance);
         userRepository.save(user);
-        }
+    }
 
-        }
+}
 
 
 
