@@ -17,11 +17,12 @@ Clone project
   git clone https://github.com/raphaelaugustb/MoneyTimes/
 ```
 
-Entre no diretório do projeto
+cd Project directory
 
 ```bash
   cd MoneyTimes
 ```
+
 ## Init front-end
 
 Install Depedencies on front
@@ -43,7 +44,11 @@ Install Depedencies on back end
 ```bash
   cd backend/money_times && mvn clean install package 
 ```
+Run docker container to start DB
 
+```bash
+  docker compose up
+```
 Run Back-End
 
 ```bash
@@ -52,5 +57,5 @@ Run Back-End
 
 ## Documents
 
-[Documents](https://github.com/raphaelaugustb/MoneyTimes/documents)
+![Documents](https://github.com/raphaelaugustb/MoneyTimes/blob/main/documents/documents.md)
 
