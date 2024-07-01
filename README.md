@@ -20,7 +20,7 @@ Clone project
 cd Project directory
 
 ```bash
-  cd MoneyTimes
+  cd MoneyTimes/backend/money_times
 ```
 Install dependencies
 ```bash
