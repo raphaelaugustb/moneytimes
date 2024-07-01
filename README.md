@@ -20,17 +20,9 @@ Clone project
 cd Project directory
 
 ```bash
-  cd MoneyTimes/backend/money_times
+  cd MoneyTimes
 ```
-Install dependencies
-```bash
-  mvn clean install package
-```
-Run docker container to start DB
 
-```bash
-  docker compose up
-```
 ## Init front-end
 
 Install Depedencies on front
@@ -52,7 +44,11 @@ Install Depedencies on back end
 ```bash
   cd backend/money_times && mvn clean install package 
 ```
+Run docker container to start DB
 
+```bash
+  docker compose up
+```
 Run Back-End
 
 ```bash
