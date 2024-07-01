@@ -17,10 +17,19 @@ Clone project
   git clone https://github.com/raphaelaugustb/MoneyTimes/
 ```
 
-Entre no diretório do projeto
+cd Project directory
 
 ```bash
   cd MoneyTimes
+```
+Install dependencies
+```bash
+  mvn clean install package
+```
+Run docker container to start DB
+
+```bash
+  docker compose up
 ```
 ## Init front-end
 
