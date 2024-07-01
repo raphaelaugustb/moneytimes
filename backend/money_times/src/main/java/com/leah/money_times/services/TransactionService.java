@@ -22,12 +22,32 @@ public class TransactionService {
     private  UserService userService;
 
     //Verificar transação
-    public Boolean verifyTransaction(TransactionRequest transactionRequest) {
+    private Boolean verifyTransaction(TransactionRequest transactionRequest) {
         if (transactionRequest != null){
             return true;
         } else {
             throw  new NullPointerException("Transação inválida");
         }
+    }
+    //Verificar fields da transaction
+    private TransactionRequest verificateFieldTransactionRequest(Transaction transaction , TransactionRequest transactionRequest ){
+        TransactionRequest transactionRequestUpdate =  new TransactionRequest();
+        if (transactionRequest.getNameTransaction() != null){
+            transactionRequestUpdate.setNameTransaction(transactionRequest.getNameTransaction());
+        } else {
+            transactionRequestUpdate.setNameTransaction(transaction.getNameTransaction());
+        }
+        if (transactionRequest.getTypeTransaction() != null){
+            transactionRequestUpdate.setTypeTransaction(transactionRequest.getTypeTransaction());
+        } else {
+            transactionRequestUpdate.setTypeTransaction(transaction.getTypeTransaction());
+        }
+        if (transactionRequest.getValueTransaction() != 0){
+            transactionRequestUpdate.setValueTransaction(transactionRequest.getValueTransaction());
+        } else {
+            transactionRequestUpdate.setValueTransaction(transaction.getValueTransaction());
+        }
+        return  transactionRequestUpdate;
     }
 
     public void createNewBIll(String userId , TransactionRequest transactionRequest){
@@ -81,25 +101,36 @@ public class TransactionService {
         }
         return transactionIncome;
     }
-    public TransactionRequest verificateFieldTransactionRequest(Transaction transaction , TransactionRequest transactionRequest ){
-        TransactionRequest transactionRequestUpdate =  new TransactionRequest();
-        if (transactionRequest.getNameTransaction() != null){
-            transactionRequestUpdate.setNameTransaction(transactionRequest.getNameTransaction());
-        } else {
-            transactionRequestUpdate.setNameTransaction(transaction.getNameTransaction());
+   public void deleteTransactionById(String userId, String transactionId){
+        User user = userService.verifyUser(userId);
+        Transaction       transactionRemove = null;
+        Income incomeRemove = null;
+        Bill billRemove = null;
+        for (Transaction transaction : user.getTransactionList()) {
+             if (Objects.equals(transaction.getIdTransaction(), transactionId)) {
+                 transactionRemove = transaction;
+                 break;
         }
-        if (transactionRequest.getTypeTransaction() != null){
-            transactionRequestUpdate.setTypeTransaction(transactionRequest.getTypeTransaction());
-        } else {
-            transactionRequestUpdate.setTypeTransaction(transaction.getTypeTransaction());
         }
-        if (transactionRequest.getValueTransaction() != 0){
-            transactionRequestUpdate.setValueTransaction(transactionRequest.getValueTransaction());
-        } else {
-            transactionRequestUpdate.setValueTransaction(transaction.getValueTransaction());
+        for (Bill bill : user.getBillsList()) {
+            if (Objects.equals(bill.getIdTransaction(), transactionId)){
+                billRemove = bill;
+                break;
+            }
         }
-        return  transactionRequestUpdate;
-    }
+       for(Income income : user.getIncomesList()){
+           if (Objects.equals(income.getIdTransaction(), transactionId)) {
+               incomeRemove = income;
+               break;
+           }
+       }
+       user.getBillsList().remove(billRemove);
+       user.getTransactionList().remove(transactionRemove);
+       user.getIncomesList().remove(incomeRemove);
+       userRepository.save(user);
+   }
+
+
     public void updateTransactionInfo(String userId, String transactionId, TransactionRequest transactionRequest){
         User user = userService.verifyUser(userId);
         String typeTransaction = null;
