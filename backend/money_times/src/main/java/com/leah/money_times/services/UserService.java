@@ -6,51 +6,59 @@ import com.leah.money_times.request.UserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.Bidi;
 import java.util.ArrayList;
-import java.util.Optional;
 
 @Service
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
     //Verificar usuário
-    public User verifyUser(String userId){{
-        User user = userRepository.findById(userId).get();
-        if ((user != null)){
-            return user;
-        } else {
-            throw new NullPointerException("Usuário invalido");
+    public User verifyUser(String userId) {
+        {
+            User user = userRepository.findById(userId).get();
+            if ((user != null)) {
+                return user;
+            } else {
+                throw new NullPointerException("Usuário invalido");
+            }
         }
     }
-    }
-    public void createUser(User user){
+
+    public void createUser(UserRequest userRequest) {
+        User user = new User();
+        user.setUsername(userRequest.getUsername());
+        user.setPassword(userRequest.getPassword());
+        user.setEmail(userRequest.getEmail());
         user.setIncomesList(new ArrayList<>());
         user.setBillsList(new ArrayList<>());
         user.setTransactionList(new ArrayList<>());
         userRepository.save(user);
     }
-    public void deleteUser(String id){
-        if (userRepository.existsById(id)){
+
+    public void deleteUser(String id) {
+        if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
         } else {
             throw new RuntimeException("User not found");
         }
     }
-    public User getUserInfo(String id){
+
+    public User getUserInfo(String id) {
         User user = verifyUser(id);
         return user;
     }
-    public void updateUserInfo(String id, UserRequest userRequest){
+
+    public void updateUserInfo(String id, UserRequest userRequest) {
         User user = verifyUser(id);
 
-        if (userRequest.getUsername() != null){
+        if (userRequest.getUsername() != null) {
             user.setUsername(userRequest.getUsername());
         }
-        if (userRequest.getEmail() != null){
+        if (userRequest.getEmail() != null) {
             user.setEmail(userRequest.getEmail());
         }
-        if (userRequest.getPassword() != null){
+        if (userRequest.getPassword() != null) {
             user.setPassword(userRequest.getPassword());
         }
         userRepository.save(user);
