@@ -41,15 +41,14 @@ public class TransactionController {
         return ResponseEntity.ok("Transaction sucessfully deleted");
     }
 
-    @GetMapping("{idUser}/transactions/{name_type_query}/{name_type_transaction}")
-    public ResponseEntity<List<Transaction>> listTransactionsByNameOrType(@PathVariable String idUser, @PathVariable String name_type_query, @PathVariable String name_type_transaction) {
-        if (name_type_query.equals("name")) {
-            return ResponseEntity.ok(transactionService.listTransactionByName(idUser, name_type_transaction));
-        } else if (name_type_query.equals("type")) {
-            return ResponseEntity.ok(transactionService.listTransactionByType(idUser, name_type_transaction));
-        } else {
-            return ResponseEntity.ok(transactionService.listAllTransactions(idUser));
+    @GetMapping("{idUser}/transactions/")
+    public ResponseEntity<List<Transaction>> listTransactionsByNameOrType(@PathVariable String idUser, @RequestParam String query, @RequestParam String type_name) {
+        if (query.equals("name")) {
+            return ResponseEntity.ok(transactionService.listTransactionByName(idUser, type_name));
+        } else if (query.equals("type")) {
+            return ResponseEntity.ok(transactionService.listTransactionByType(idUser, type_name));
         }
+        return ResponseEntity.ok(transactionService.listAllTransactions(idUser));
     }
 
     @GetMapping("{idUser}/transactions/{typeQuery}")
@@ -63,11 +62,9 @@ public class TransactionController {
         }
     }
 
-    @GetMapping("{idUser}/transactions/value/{initValue}/{finalValue}")
-    public ResponseEntity<List<Transaction>> listTransactionsByValue(@PathVariable String idUser, @PathVariable String initValue, @PathVariable String finalValue) {
-        int finalValuetoInt = Integer.parseInt(finalValue);
-        int initialValuteToInt = Integer.parseInt(initValue);
-        return ResponseEntity.ok(transactionService.listTransactionByValue(idUser, initialValuteToInt, finalValuetoInt));
+    @GetMapping("{idUser}/transactions/value")
+    public ResponseEntity<List<Transaction>> listTransactionsByValue(@PathVariable String idUser, @RequestParam int initVal, @RequestParam int finalVal) {
+        return ResponseEntity.ok(transactionService.listTransactionByValue(idUser, initVal, finalVal));
     }
 
 }
