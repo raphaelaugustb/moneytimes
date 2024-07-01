@@ -52,5 +52,5 @@ Run Back-End
 
 ## Documents
 
-[Documents](https://github.com/raphaelaugustb/MoneyTimes/documents)
+[Documents]([https://github.com/raphaelaugustb/MoneyTimes/documents](https://github.com/raphaelaugustb/MoneyTimes/blob/main/documents/documents.md))
 
