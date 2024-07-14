@@ -2,7 +2,7 @@
 <img src="documents/images/moneylogo.png" width="80"/>
 
 
-### MoneyTimes - Administrate your bills on a new way
+### Moneytimes - Administrate your bills and save your money
 
 
 
