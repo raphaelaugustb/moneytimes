@@ -15,13 +15,13 @@ Clone project
   git clone https://github.com/raphaelaugustb/moneytimes/
 ```
 
-cd Project directory
+Enter on directory
 
 ```bash
   cd moneytimes
 ```
 
-## Seutup back-end
+#### Setup back-end
 
 Install depedencies
 
@@ -39,7 +39,7 @@ Run api
   mvn spring-boot:run 
 ```
 
-## Documents
+#### Documents
 
 ![Documents](https://github.com/raphaelaugustb/MoneyTimes/blob/main/documents/documents.md)
 
