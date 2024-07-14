@@ -1,5 +1,5 @@
 <br />
-<img src="documents/images/moneylogo.png" width="100"/>
+<img src="documents/images/moneylogo.png" width="120"/>
 
 
 ### MoneyTimes - Administrate your bills on a new way
@@ -18,7 +18,7 @@ Clone project
 cd Project directory
 
 ```bash
-  cd MoneyTimes
+  cd moneytimes
 ```
 
 ## Seutup back-end
