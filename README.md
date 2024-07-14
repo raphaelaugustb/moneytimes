@@ -18,7 +18,7 @@ Clone project
 cd Project directory
 
 ```bash
-  cd MoneyTimes
+  cd moneytimes
 ```
 
 ## Seutup back-end
