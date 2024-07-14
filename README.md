@@ -1,5 +1,5 @@
 <br />
-<img src="documents/images/moneytimes-logo.png" width="80"/>
+<img src="documents/images/moneylogo.png" width="80"/>
 
 
 ### Capto - Administrate your bills on a new way
