@@ -1,8 +1,8 @@
 <br />
-<img src="documents/images/moneylogo.png" width="80"/>
+<img src="documents/images/moneylogo.png" width="100"/>
 
 
-### Capto - Administrate your bills on a new way
+### MoneyTimes - Administrate your bills on a new way
 
 
 
