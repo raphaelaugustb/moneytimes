@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.leah</groupId>
-    <artifactId>money_times</artifactId>
+    <artifactId>moneytimes</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>money_times</name>
+    <name>moneytimes</name>
     <description>MoneyTimes is free to use app with simple UI to store all of yours bills and incomes on month you can
         also get the amount of your bills according to your incomes and other many functionality.
     </description>
