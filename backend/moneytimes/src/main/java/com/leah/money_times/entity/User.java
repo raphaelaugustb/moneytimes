@@ -29,4 +29,4 @@ public class User {
     List<Income> incomesList;
     List<Transaction> transactionList;
     double balance;
-}
+ }
