@@ -1,5 +1,5 @@
 <br />
-<img src="documents/images/moneylogo.png" width="100"/>
+<img src="documents/images/moneylogo.png" width="80"/>
 
 
 ### Moneytimes - Administrate your bills and save your money
