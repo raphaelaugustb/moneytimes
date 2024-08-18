@@ -1,6 +1,7 @@
 package com.leah.money_times.services;
 
 import com.leah.money_times.entity.User;
+import com.leah.money_times.exception.InvalidTransaction;
 import com.leah.money_times.model.Bill;
 import com.leah.money_times.model.Income;
 import com.leah.money_times.model.Transaction;
@@ -15,76 +16,54 @@ import java.util.Objects;
 
 @Service
 public class TransactionService {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserService userService;
 
-    //Verificar transação
-    private Boolean verifyTransaction(TransactionRequest transactionRequest) {
-        if (transactionRequest != null) {
-            return true;
-        } else {
-            throw new NullPointerException("Transação inválida");
-        }
+    UserRepository userRepository;
+    UserService userService;
+
+    public TransactionService(UserRepository userRepository, UserService userService) {
+        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
-    //Verificar fields da transaction
-    private TransactionRequest verificateFieldTransactionRequest(Transaction transaction, TransactionRequest transactionRequest) {
-        TransactionRequest transactionRequestUpdate = new TransactionRequest();
-        if (transactionRequest.getNameTransaction() != null) {
-            transactionRequestUpdate.setNameTransaction(transactionRequest.getNameTransaction());
-        } else {
-            transactionRequestUpdate.setNameTransaction(transaction.getNameTransaction());
-        }
-        if (transactionRequest.getTypeTransaction() != null) {
-            transactionRequestUpdate.setTypeTransaction(transactionRequest.getTypeTransaction());
-        } else {
-            transactionRequestUpdate.setTypeTransaction(transaction.getTypeTransaction());
-        }
-        if (transactionRequest.getValueTransaction() != 0) {
-            transactionRequestUpdate.setValueTransaction(transactionRequest.getValueTransaction());
-        } else {
-            transactionRequestUpdate.setValueTransaction(transaction.getValueTransaction());
-        }
-        return transactionRequestUpdate;
+    //Verificar transação
+    private void verifyTransaction(TransactionRequest transactionRequest) {
+        if (transactionRequest.typeTransaction() == null || transactionRequest.nameTransaction() == null || transactionRequest.valueTransaction() == 0)
+            throw new InvalidTransaction("Invalid transaction request: Missing Required Fields");
     }
 
     public void createNewBIll(String userId, TransactionRequest transactionRequest) {
         User user = userService.verifyUser(userId);
         Bill bill = new Bill();
-        Boolean verifiedTransaction = verifyTransaction(transactionRequest);
-        if (verifiedTransaction) {
-            bill.setNameTransaction(transactionRequest.getNameTransaction());
-            bill.setValueTransaction(transactionRequest.getValueTransaction());
-            bill.setTypeTransaction(transactionRequest.getTypeTransaction());
-            bill.setTypeBill_Income("Bill");
-            user.setBalance(user.getBalance() - bill.getValueTransaction());
-            user.getTransactionList().add(bill);
-            user.getBillsList().add(bill);
-            userRepository.save(user);
-        }
+        verifyTransaction(transactionRequest);
+
+        bill.setNameTransaction(transactionRequest.nameTransaction());
+        bill.setValueTransaction(transactionRequest.valueTransaction());
+        bill.setTypeTransaction(transactionRequest.typeTransaction());
+        bill.setTypeBill_Income("Bill");
+        user.setBalance(user.getBalance() - bill.getValueTransaction());
+        user.getTransactionList().add(bill);
+        user.getBillsList().add(bill);
+        userRepository.save(user);
     }
 
     public void createNewIncome(String userId, TransactionRequest transactionRequest) {
         User user = userService.verifyUser(userId);
-        boolean verifiedTransaction = verifyTransaction(transactionRequest);
+        verifyTransaction(transactionRequest);
         Income income = new Income();
-        if (verifiedTransaction) {
-            income.setNameTransaction(transactionRequest.getNameTransaction());
-            income.setValueTransaction(transactionRequest.getValueTransaction());
-            income.setTypeTransaction(transactionRequest.getTypeTransaction());
-            income.setTypeBill_Income("Income");
-            user.setBalance(user.getBalance() + income.getValueTransaction());
-            user.getTransactionList().add(income);
-            user.getIncomesList().add(income);
-            userRepository.save(user);
-        }
+        income.setNameTransaction(transactionRequest.nameTransaction());
+        income.setValueTransaction(transactionRequest.valueTransaction());
+        income.setTypeTransaction(transactionRequest.typeTransaction());
+        income.setTypeBill_Income("Income");
+        user.setBalance(user.getBalance() + income.getValueTransaction());
+        user.getTransactionList().add(income);
+        user.getIncomesList().add(income);
+        userRepository.save(user);
     }
+
 
     public List<Transaction> listAllTransactions(String userId) {
         List<Transaction> transactionList = userService.verifyUser(userId).getTransactionList();
-        if (transactionList.isEmpty() || transactionList == null) {
+        if (transactionList.isEmpty()) {
             throw new NullPointerException("Lista está vazia");
         }
         return transactionList;
@@ -92,7 +71,7 @@ public class TransactionService {
 
     public List<Bill> listAllBills(String userId) {
         List<Bill> transactionBills = userService.verifyUser(userId).getBillsList();
-        if (transactionBills.isEmpty() || transactionBills == null) {
+        if (transactionBills.isEmpty()) {
             throw new NullPointerException("Lista está vazia");
         }
         return transactionBills;
@@ -100,7 +79,7 @@ public class TransactionService {
 
     public List<Income> listAllIncomes(String userId) {
         List<Income> transactionIncome = userService.verifyUser(userId).getIncomesList();
-        if (transactionIncome.isEmpty() || transactionIncome == null) {
+        if (transactionIncome.isEmpty()) {
             throw new NullPointerException("Lista está vazia");
         }
         return transactionIncome;
@@ -186,10 +165,10 @@ public class TransactionService {
         double billsBalance = 0;
         for (Transaction t : user.getTransactionList()) {
             if (t.getIdTransaction().equals(transactionId)) {
-                TransactionRequest transactionVerifcated = verificateFieldTransactionRequest(t, transactionRequest);
-                t.setNameTransaction(transactionVerifcated.getNameTransaction());
-                t.setValueTransaction(transactionVerifcated.getValueTransaction());
-                t.setTypeTransaction(transactionVerifcated.getTypeTransaction());
+                verifyTransaction(transactionRequest);
+                t.setNameTransaction(transactionRequest.nameTransaction());
+                t.setValueTransaction(transactionRequest.valueTransaction());
+                t.setTypeTransaction(transactionRequest.typeTransaction());
                 typeTransaction = t.getTypeBill_Income();
                 break;
             }
@@ -200,10 +179,10 @@ public class TransactionService {
             case "Bill" -> {
                 for (Bill b : user.getBillsList()) {
                     if (Objects.equals(b.getIdTransaction(), transactionId)) {
-                        TransactionRequest transactionVerifcated = verificateFieldTransactionRequest(b, transactionRequest);
-                        b.setNameTransaction(transactionVerifcated.getNameTransaction());
-                        b.setValueTransaction(transactionVerifcated.getValueTransaction());
-                        b.setTypeTransaction(transactionVerifcated.getTypeTransaction());
+                        verifyTransaction(transactionRequest);
+                        b.setNameTransaction(transactionRequest.nameTransaction());
+                        b.setValueTransaction(transactionRequest.valueTransaction());
+                        b.setTypeTransaction(transactionRequest.typeTransaction());
                         break;
                     }
                 }
@@ -212,14 +191,17 @@ public class TransactionService {
             case "Income" -> {
                 for (Income i : user.getIncomesList()) {
                     if (Objects.equals(i.getIdTransaction(), transactionId)) {
-                        TransactionRequest transactionVerifcated = verificateFieldTransactionRequest(i, transactionRequest);
-                        i.setNameTransaction(transactionVerifcated.getNameTransaction());
-                        i.setValueTransaction(transactionVerifcated.getValueTransaction());
-                        i.setTypeTransaction(transactionVerifcated.getTypeTransaction());
+                        verifyTransaction(transactionRequest);
+                        i.setNameTransaction(transactionRequest.nameTransaction());
+                        i.setValueTransaction(transactionRequest.valueTransaction());
+                        i.setTypeTransaction(transactionRequest.typeTransaction());
                         break;
                     }
                 }
             }
+             default -> {
+                throw new InvalidTransaction("Invalid transaction request: Invalid type transaction");
+             }
         }
         for (Income i : user.getIncomesList()) {
             incomeBalance += i.getValueTransaction();
@@ -230,8 +212,6 @@ public class TransactionService {
         user.setBalance(incomeBalance - billsBalance);
         userRepository.save(user);
     }
-
 }
-
 
 

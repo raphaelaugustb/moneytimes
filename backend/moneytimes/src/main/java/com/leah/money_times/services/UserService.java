@@ -1,66 +1,58 @@
 package com.leah.money_times.services;
 
 import com.leah.money_times.entity.User;
+import com.leah.money_times.exception.InvalidRequest;
+import com.leah.money_times.exception.UserNotFoundException;
 import com.leah.money_times.repository.UserRepository;
 import com.leah.money_times.request.UserRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
 @Service
 public class UserService {
-    @Autowired
-    private UserRepository userRepository;
+
+     UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     //Verificar usuário
     public User verifyUser(String userId) {
-        {
-            User user = userRepository.findById(userId).get();
-            if ((user != null)) {
-                return user;
-            } else {
-                throw new NullPointerException("Usuário invalido");
-            }
-        }
+     return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
     public void createUser(UserRequest userRequest) {
         User user = new User();
-        user.setUsername(userRequest.getUsername());
-        user.setPassword(userRequest.getPassword());
-        user.setEmail(userRequest.getEmail());
+        if (userRequest.username() == null || userRequest.email() == null || userRequest.password() == null)
+            throw new InvalidRequest("Invalid user request: Missing parameters");
+        user.setUsername(userRequest.username());
+        user.setPassword(userRequest.password());
+        user.setEmail(userRequest.email());
         user.setIncomesList(new ArrayList<>());
         user.setBillsList(new ArrayList<>());
         user.setTransactionList(new ArrayList<>());
         userRepository.save(user);
     }
 
-    public void deleteUser(String id) {
-        if (userRepository.existsById(id)) {
-            userRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("User not found");
-        }
+    public void deleteUser(String userId) {
+        User user = verifyUser(userId);
+        userRepository.delete(user);
     }
 
     public User getUserInfo(String id) {
-        User user = verifyUser(id);
-        return user;
+        return verifyUser(id);
     }
 
     public void updateUserInfo(String id, UserRequest userRequest) {
         User user = verifyUser(id);
 
-        if (userRequest.getUsername() != null) {
-            user.setUsername(userRequest.getUsername());
-        }
-        if (userRequest.getEmail() != null) {
-            user.setEmail(userRequest.getEmail());
-        }
-        if (userRequest.getPassword() != null) {
-            user.setPassword(userRequest.getPassword());
-        }
+        if (userRequest.username() == null || userRequest.email() == null || userRequest.password() == null)
+            throw new InvalidRequest("Invalid user request: Missing parameters");
+        user.setUsername(userRequest.email());
+        user.setPassword(userRequest.password());
+        user.setUsername(userRequest.username());
         userRepository.save(user);
 
     }
