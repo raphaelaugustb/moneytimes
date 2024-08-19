@@ -21,12 +21,12 @@ import java.util.List;
 @Document(collection = "user")
 public class User {
     @Id
-    String id;
-    String username;
-    String password;
-    String email;
-    List<Bill> billsList;
-    List<Income> incomesList;
-    List<Transaction> transactionList;
-    double balance;
- }
+    private String id;
+    private String username;
+    private String password;
+    private String email;
+    private List<Bill> billsList;
+    private List<Income> incomesList;
+    private List<Transaction> transactionList;
+    private double balance;
+}

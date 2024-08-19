@@ -1,13 +1,12 @@
 package com.leah.money_times.services;
 
 import com.leah.money_times.entity.User;
-import com.leah.money_times.exception.InvalidTransaction;
+import com.leah.money_times.exception.InvalidTransactionException;
 import com.leah.money_times.model.Bill;
 import com.leah.money_times.model.Income;
 import com.leah.money_times.model.Transaction;
 import com.leah.money_times.repository.UserRepository;
 import com.leah.money_times.request.TransactionRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ public class TransactionService {
     //Verificar transação
     private void verifyTransaction(TransactionRequest transactionRequest) {
         if (transactionRequest.typeTransaction() == null || transactionRequest.nameTransaction() == null || transactionRequest.valueTransaction() == 0)
-            throw new InvalidTransaction("Invalid transaction request: Missing Required Fields");
+            throw new InvalidTransactionException("Invalid transaction request: Missing Required Fields");
     }
 
     public void createNewBIll(String userId, TransactionRequest transactionRequest) {
@@ -200,7 +199,7 @@ public class TransactionService {
                 }
             }
              default -> {
-                throw new InvalidTransaction("Invalid transaction request: Invalid type transaction");
+                throw new InvalidTransactionException("Invalid transaction request: Invalid type transaction");
              }
         }
         for (Income i : user.getIncomesList()) {

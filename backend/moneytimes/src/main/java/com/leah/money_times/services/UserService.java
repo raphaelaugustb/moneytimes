@@ -1,7 +1,7 @@
 package com.leah.money_times.services;
 
 import com.leah.money_times.entity.User;
-import com.leah.money_times.exception.InvalidRequest;
+import com.leah.money_times.exception.InvalidRequestException;
 import com.leah.money_times.exception.UserNotFoundException;
 import com.leah.money_times.repository.UserRepository;
 import com.leah.money_times.request.UserRequest;
@@ -26,7 +26,7 @@ public class UserService {
     public void createUser(UserRequest userRequest) {
         User user = new User();
         if (userRequest.username() == null || userRequest.email() == null || userRequest.password() == null)
-            throw new InvalidRequest("Invalid user request: Missing parameters");
+            throw new InvalidRequestException("Invalid user request: Missing parameters");
         user.setUsername(userRequest.username());
         user.setPassword(userRequest.password());
         user.setEmail(userRequest.email());
@@ -49,7 +49,7 @@ public class UserService {
         User user = verifyUser(id);
 
         if (userRequest.username() == null || userRequest.email() == null || userRequest.password() == null)
-            throw new InvalidRequest("Invalid user request: Missing parameters");
+            throw new InvalidRequestException("Invalid user request: Missing parameters");
         user.setUsername(userRequest.email());
         user.setPassword(userRequest.password());
         user.setUsername(userRequest.username());
